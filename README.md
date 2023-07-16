@@ -1,5 +1,5 @@
 # TanksOnline
- I made TanksOnline for the YouTube video 
+ I made TanksOnline(Client Side Prediction + Server Authorize Mechanic)  for the YouTube video 
 
 ## Additional Packages Used
 * Minimalist Scalable Grid Prototype Materials
