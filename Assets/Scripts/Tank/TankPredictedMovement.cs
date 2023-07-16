@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FishNet.Object;
 using FishNet.Object.Prediction;
 using FishNet.Transporting;
+using Signals;
 using UnityEngine;
 
 
@@ -66,6 +67,8 @@ public class TankPredictedMovement : NetworkBehaviour
     [SerializeField] private float m_TurnSpeed;
 
     private Rigidbody m_Rigidbody;
+
+    private bool IsInitialized = true;
     
     #endregion
 
@@ -79,10 +82,7 @@ public class TankPredictedMovement : NetworkBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void OnDisable()
-    {
-        UnSubscire();
-    }
+    
 
     #endregion
 
@@ -108,7 +108,8 @@ public class TankPredictedMovement : NetworkBehaviour
     private void BuildMoveData(out MoveData md)
     {
         md = default;
-
+        if (IsInitialized is false) return;
+   
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
@@ -159,7 +160,22 @@ public class TankPredictedMovement : NetworkBehaviour
             Reconciliation(rd, true);
         }
     }
-    
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if(IsOwner is false) return;
+        PlayerSignals.Instance.OnPlayerDead += OnPlayerDead;
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        if(IsOwner is false) return;
+        PlayerSignals.Instance.OnPlayerDead -= OnPlayerDead;
+
+    }
+
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
@@ -175,6 +191,10 @@ public class TankPredictedMovement : NetworkBehaviour
 
     }
 
+    private void OnPlayerDead()
+    {
+        IsInitialized = false;
+    }
     #endregion
 
 

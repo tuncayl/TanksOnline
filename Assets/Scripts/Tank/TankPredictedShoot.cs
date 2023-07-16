@@ -19,7 +19,7 @@ public class TankPredictedShoot : NetworkBehaviour
     private bool _spawnBullet = false;
 
     private float FireRate = 0;
-    
+
     #endregion
 
 

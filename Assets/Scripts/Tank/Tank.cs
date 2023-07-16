@@ -51,7 +51,6 @@ public class Tank : NetworkBehaviour
 
     private void OnPlayerDead()
     {
-        _TankPredictedMovement.enabled = false;
         _TankPredictedShoot.enabled = false;
         _TankPredictedHealth.enabled = false;
     }
